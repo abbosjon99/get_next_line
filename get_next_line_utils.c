@@ -6,7 +6,7 @@
 /*   By: akeldiya <akeldiya@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 18:40:33 by akeldiya          #+#    #+#             */
-/*   Updated: 2024/04/01 19:20:53 by akeldiya         ###   ########.fr       */
+/*   Updated: 2024/04/01 20:23:41 by akeldiya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ fj	ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
 	size_t	j;
-	fj	dataset;
+	fj		dataset;
 
 	j = 0;
 	if (s1)
@@ -35,11 +35,10 @@ fj	ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	dataset.nxtline[i + j] = '\0';
-	if (s2[j] == '\0')
+	if (s2[j - 1] == '\0')
 		dataset.i = 0;
 	return (dataset);
 }
-
 size_t	ft_strnlen(const char *s)
 {
 	size_t	size;
@@ -105,7 +104,6 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 // 	}
 // 	return (newstr);
 // }
-
 
 // int	ft_strcmp(char *s1, char *s2)
 // {

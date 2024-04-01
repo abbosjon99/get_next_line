@@ -6,7 +6,7 @@
 /*   By: akeldiya <akeldiya@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 18:40:22 by akeldiya          #+#    #+#             */
-/*   Updated: 2024/04/01 19:43:53 by akeldiya         ###   ########.fr       */
+/*   Updated: 2024/04/01 20:23:53 by akeldiya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_next_line(int fd)
 {
 	int			i;
 	static char	*temp;
-	fj	dset;
+	fj			dset;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
@@ -30,15 +30,17 @@ char	*get_next_line(int fd)
 			ft_memmove(temp, (temp + dset.i + 1), ft_strlen(temp + dset.i));
 			return (dset.nxtline);
 		}
+		else
+			free(temp);
 	}
-	else
-		temp = malloc(BUFFER_SIZE + 1);
+	temp = malloc(BUFFER_SIZE + 1);
 	if (!temp)
 		return (NULL);
 	i = read(fd, temp, BUFFER_SIZE);
-	while (i)
+	if (i <= 0)
+		return (NULL);
+	while (i > 0)
 	{
-		printf("\n\trun\n");
 		dset = ft_strjoin(dset.nxtline, temp);
 		if (dset.i != 0)
 		{
