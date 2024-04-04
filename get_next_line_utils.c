@@ -6,46 +6,50 @@
 /*   By: akeldiya <akeldiya@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 18:40:33 by akeldiya          #+#    #+#             */
-/*   Updated: 2024/04/01 20:23:41 by akeldiya         ###   ########.fr       */
+/*   Updated: 2024/04/02 01:12:10 by akeldiya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-fj	ft_strjoin(char const *s1, char const *s2)
+t_fj	ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
 	size_t	j;
-	fj		dataset;
+	t_fj	dataset;
 
 	j = 0;
 	if (s1)
 		j = ft_strlen(s1);
-	dataset.i = ft_strnlen(s2);
-	dataset.nxtline = (char *)malloc(j + dataset.i + 2);
+	dataset.i = ft_strnlen(s2) + 1;
+	dataset.nxtline = (char *)malloc(j + dataset.i);
 	if (!dataset.nxtline)
 		return (dataset);
 	i = 0;
 	while (s1 && s1[i] && ++i)
 		dataset.nxtline[i - 1] = s1[i - 1];
 	j = 0;
-	while (j < dataset.i + 1)
+	while (j < dataset.i)
 	{
 		dataset.nxtline[i + j] = s2[j];
 		j++;
 	}
-	dataset.nxtline[i + j] = '\0';
-	if (s2[j - 1] == '\0')
+	if (s2[j - 1] != '\n')
 		dataset.i = 0;
 	return (dataset);
 }
+
 size_t	ft_strnlen(const char *s)
 {
 	size_t	size;
 
 	size = 0;
 	while (s[size] != '\n' && s[size] != '\0')
+	{
+		if (s[size] == '\n')
+			return (size + 1);
 		size++;
+	}
 	return (size);
 }
 
@@ -59,58 +63,22 @@ size_t	ft_strlen(const char *s)
 	return (size);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+char	*ft_strdup(const char *s)
 {
-	unsigned int		i;
-	unsigned char		*ptr_dest;
-	const unsigned char	*ptr_src;
+	size_t	size;
+	size_t	i;
+	char	*newstr;
 
 	i = 0;
-	if (!src && !dest)
+	size = ft_strlen(s);
+	newstr = malloc(size + 1);
+	if (!newstr)
 		return (NULL);
-	ptr_dest = dest;
-	ptr_src = src;
-	if (src < dest)
+	while (i < size)
 	{
-		while (n-- > 0)
-		{
-			ptr_dest[n] = ptr_src[n];
-		}
+		newstr[i] = s[i];
+		i++;
 	}
-	else
-	{
-		while (i < n)
-		{
-			ptr_dest[i] = ptr_src[i];
-			i++;
-		}
-	}
-	return (dest);
+	newstr[i] = '\0';
+	return (newstr);
 }
-
-// char	*ft_strndup(const char *s)
-// {
-// 	size_t	size;
-// 	char	*newstr;
-
-// 	size = ft_strnlen(s);
-// 	newstr = (char *)malloc(sizeof(char) * (size + 1));
-// 	if (!newstr)
-// 		return (NULL);
-// 	newstr[size] = s[size];
-// 	while (size-- > 0)
-// 	{
-// 		newstr[size] = s[size];
-// 	}
-// 	return (newstr);
-// }
-
-// int	ft_strcmp(char *s1, char *s2)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (s1[i] == s2[i] && s1[i] != '\0')
-// 		i++;
-// 	return (s1[i] - s2[i]);
-// }

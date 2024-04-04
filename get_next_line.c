@@ -6,7 +6,7 @@
 /*   By: akeldiya <akeldiya@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 18:40:22 by akeldiya          #+#    #+#             */
-/*   Updated: 2024/04/01 20:23:53 by akeldiya         ###   ########.fr       */
+/*   Updated: 2024/04/02 01:19:07 by akeldiya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,29 @@
 char	*get_next_line(int fd)
 {
 	int			i;
-	static char	*temp;
-	fj			dset;
+	static char	*saved;
+	char		*temp;
+	t_fj		dset;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
 	dset.nxtline = NULL;
-	if (temp)
+	if (saved && *saved)
 	{
-		dset = ft_strjoin(dset.nxtline, temp);
+		dset = ft_strjoin(dset.nxtline, saved);
 		if (dset.i != 0)
 		{
-			ft_memmove(temp, (temp + dset.i + 1), ft_strlen(temp + dset.i));
+			temp = ft_strdup(saved + dset.i);
+			free(saved);
+			saved = ft_strdup(temp);
+			free(temp);
 			return (dset.nxtline);
 		}
-		else
-			free(temp);
+		free(saved);
 	}
-	temp = malloc(BUFFER_SIZE + 1);
+	else
+		saved = malloc(BUFFER_SIZE + 1);
+	temp = malloc(BUFFER_SIZE);
 	if (!temp)
 		return (NULL);
 	i = read(fd, temp, BUFFER_SIZE);
@@ -44,10 +49,12 @@ char	*get_next_line(int fd)
 		dset = ft_strjoin(dset.nxtline, temp);
 		if (dset.i != 0)
 		{
-			ft_memmove(temp, (temp + dset.i + 1), ft_strlen(temp + dset.i));
+			saved = ft_strdup(temp + dset.i);
+			free(temp);
 			return (dset.nxtline);
 		}
 		i = read(fd, temp, BUFFER_SIZE);
 	}
+	free(saved);
 	return (dset.nxtline);
 }
