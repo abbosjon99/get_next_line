@@ -6,45 +6,61 @@
 /*   By: akeldiya <akeldiya@student.42warsaw.pl>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 18:40:33 by akeldiya          #+#    #+#             */
-/*   Updated: 2024/04/02 01:12:10 by akeldiya         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:35:56 by akeldiya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_fj	ft_strjoin(char const *s1, char const *s2)
+char	*ft_charshifter(char *s1, int shift)
 {
-	size_t	i;
-	size_t	j;
-	t_fj	dataset;
+	int	i;
 
-	j = 0;
-	if (s1)
-		j = ft_strlen(s1);
-	dataset.i = ft_strnlen(s2) + 1;
-	dataset.nxtline = (char *)malloc(j + dataset.i);
-	if (!dataset.nxtline)
-		return (dataset);
 	i = 0;
-	while (s1 && s1[i] && ++i)
-		dataset.nxtline[i - 1] = s1[i - 1];
-	j = 0;
-	while (j < dataset.i)
+	while (s1[i + shift])
 	{
-		dataset.nxtline[i + j] = s2[j];
-		j++;
+		s1[i] = s1[i + shift];
+		i++;
 	}
-	if (s2[j - 1] != '\n')
-		dataset.i = 0;
-	return (dataset);
+	s1[i] = '\0';
+	return (s1);
 }
 
-size_t	ft_strnlen(const char *s)
+char	*ft_strjoin(char **s1, char const *s2, int len2)
 {
-	size_t	size;
+	size_t	i;
+	int		j;
+	char	*nxtline;
+
+	j = 0;
+	if (*s1)
+		j = ft_strlen(*s1);
+	nxtline = (char *)malloc(j + len2 + 1);
+	if (!nxtline)
+		return (NULL);
+	i = 0;
+	while (*s1 && (*s1)[i])
+	{
+		nxtline[i] = (*s1)[i];
+		i++;
+	}
+	j = 0;
+	while (j < len2)
+	{
+		nxtline[i + j] = s2[j];
+		j++;
+	}
+	nxtline[i + j] = '\0';
+	free(*s1);
+	return (nxtline);
+}
+
+int	ft_strnlen(char const *s)
+{
+	int	size;
 
 	size = 0;
-	while (s[size] != '\n' && s[size] != '\0')
+	while (s[size] != '\0')
 	{
 		if (s[size] == '\n')
 			return (size + 1);
@@ -53,7 +69,7 @@ size_t	ft_strnlen(const char *s)
 	return (size);
 }
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(char const *s)
 {
 	size_t	size;
 
@@ -63,12 +79,14 @@ size_t	ft_strlen(const char *s)
 	return (size);
 }
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup(char const *s)
 {
 	size_t	size;
 	size_t	i;
 	char	*newstr;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	size = ft_strlen(s);
 	newstr = malloc(size + 1);
